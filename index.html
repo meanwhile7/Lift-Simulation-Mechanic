@@ -4,15 +4,45 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="lift.css" />
     <title>Document</title>
   </head>
   <body>
-    <div class="cont">
-      <div class="section"></div>
-      <div class="section2"></div>
-      <div class="section3"></div>
-      <div class="box"></div>
-    </div>
+    <header class="head">
+      <h1>Lift Simulation</h1>
+    </header>
+    <main class="floor-box">
+      <section class="floor">
+        <div class="floor-section floor-1">
+          <div class="btn-section">
+            <h1>Floor 1</h1>
+            <button class="btn" id="btn-1">up</button>
+            <button class="btn" id="btn-2">down</button>
+          </div>
+          <div class="lift" id="lift-1">
+              <span class="left"></span>
+              <span class="right"></span>
+          </div>
+        </div>
+      </section>
+      <section class="floor">
+        <div class="floor-section floor-2">
+          <div class="btn-section">
+            <h1>Floor 2</h1>
+            <button class="btn" id="btn-3">up</button>
+            <button class="btn" id="btn-4">down</button>
+          </div>
+        </div>
+      </section>
+      <section class="floor">
+        <div class="floor-section floor-3">
+          <div class="btn-section">
+            <h1>Floor 3</h1>
+            <button class="btn" id="btn-5">up</button>
+            <button class="btn" id="btn-6">down</button>
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
