@@ -4,59 +4,33 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="lift.css" />
     <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header class="head">
-      <h1>Lift Simulation</h1>
-    </header>
-    <!-- This contains the lift and floors like a box  -->
-    <main class="floor-box">
-      <section class="floor">                         
-        <div class="floor-section floor-1">
-          <div class="btn-section">
-            <h1>Floor 1</h1>
-            <button class="btn" id="btn-1">up</button>
-            <button class="btn" id="btn-2">down</button>
-          </div>
-          <div class="lift" id="lift-1">
-            <span class="left"></span>
-            <span class="right"></span>
-          </div>
-          <div class="lift" id="lift-2">
-            <span class="left"></span>
-            <span class="right"></span>
-          </div>
+    
+    <div class="container">
+        <div class="head">
+            <h1>Input Page </h1>
         </div>
-      </section>
-      <section class="floor">
-        <div class="floor-section floor-2">
-          <div class="btn-section">
-            <h1>Floor 2</h1>
-            <button class="btn" id="btn-3">up</button>
-            <button class="btn" id="btn-4">down</button>
+      <div class="but">
+        <span class="text" Enter the number of Floor to Exist></span>
+            <div class="input-container">
+                <input type="text" placeholder="Enter the number of Floor to Exist" />
+              </div>
+          
+        <div class="input-container">
+            <input type="text" placeholder="Enter the number of Lifts to Exist" />
           </div>
-        </div>
-      </section>
-      <section class="floor">
-        <div class="floor-section floor-3">
-          <div class="btn-section">
-            <h1>Floor 3</h1>
-            <button class="btn" id="btn-5">up</button>
-            <button class="btn" id="btn-6">down</button>
-          </div>
-        </div>
-      </section>
-      <section class="floor">
-        <div class="floor-section floor-4">
-          <div class="btn-section">
-            <h1>Floor 4</h1>
-            <button class="btn" id="btn-7">up</button>
-            <button class="btn" id="btn-8">down</button>
-          </div>
-        </div>
-      </section>
-    </main>
+        <button class="button" id="btn">Enter</button>
+        
+      </div>
+    </div>  
+    <script>
+      const btn = document.getElementById("btn");
+      btn.addEventListener("click", function() {
+        window.location.href = "main.html";
+      });
+      </script>
   </body>
 </html>
