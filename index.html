@@ -8,29 +8,41 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    
     <div class="container">
-        <div class="head">
-            <h1>Input Page </h1>
-        </div>
-      <div class="but">
-        <span class="text" Enter the number of Floor to Exist></span>
-            <div class="input-container">
-                <input type="text" placeholder="Enter the number of Floor to Exist" />
-              </div>
-          
-        <div class="input-container">
-            <input type="text" placeholder="Enter the number of Lifts to Exist" />
-          </div>
-        <button class="button" id="btn">Enter</button>
-        
+      <div class="head">
+        <h1>Input Page</h1>
       </div>
-    </div>  
-    <script>
+      <div class="but">
+        <div class="input-container">
+          <label>Enter the Number of Floor to Exist</label>
+          <input
+            type="text"
+            class="tem"
+            id="floor"
+            placeholder="Enter the number of Floor to Exist"
+          />
+        </div>
+        
+        <div class="input-container">
+          <label>Enter the Number of Lift to Exist</label>
+          <input
+            type="text"
+            id="num-lift" 
+            placeholder="Enter the number of Lifts to Exist"
+          />
+        </div>
+        <button class="button" onclick="returnVa()" id="btn">Enter</button>
+      </div>
+    </div>
+    
+   <script>
       const btn = document.getElementById("btn");
-      btn.addEventListener("click", function() {
-        window.location.href = "main.html";
+      btn.addEventListener("click", function () {
+        window.location.href = "main.html"; //These change the url in these case to move to the next page
       });
-      </script>
+    </script> 
+    
+    <script src="app.js"></script>
+    <!--Javascipt link-->
   </body>
 </html>

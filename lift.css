@@ -43,6 +43,8 @@ body {
 }
 
 
+
+
 button{
 
   
@@ -67,5 +69,11 @@ button:active{
   color: white;
   background-color: #007FFF;
     transform: translateY(4px);
+}
+
+/* Transition lift css */
+
+.lift#lift-1{
+
 }
 
