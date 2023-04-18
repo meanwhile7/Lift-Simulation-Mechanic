@@ -1,31 +1,56 @@
 
-    //input page js script 
-    /*function returnVa(){
-        const btn = document.getElementById("btn");
-        btn.addEventListener("click", function(){
-            const floor = document.getElementById("num-floor").value
-            const lift = document.getElementById("num-lift").value
-            alert(floor)
-      })
-    } */
-    let va = 0
-const floor = document.querySelector("#floor")
-const flo = document.querySelector(".tem")
+// for checking the input element 
+
+const input1 = document.getElementById("num-floor");
+const input2 = document.getElementById("num-lift");
+const myButton = document.getElementById("btn");
+
+function checkInputs() {
+  if (input1.value.length > 0 && input2.value.length > 0) {
+    myButton.disabled = false;
+    myButton.addEventListener("click", function(){
+        container.style.display="none"
+    })
+  } else {
+    myButton.disabled = true;
+  }
+}
+
+
+
+input1.addEventListener("input", checkInputs);
+input2.addEventListener("input", checkInputs);
+
+//
+
+let va = 0
+const floor = document.querySelector("#num-floor")
+const liftInput = document.getElementById("num-lift");
 
 floor.addEventListener('change',(e)=>{
     va = e.target.value
 })
 
     function returnVa(){
-        console.log(va)
+        const floor = document.getElementById("num-floor")
+        floor.addEventListener
+        const liftInput = document.getElementById("num-lift");
+        for (i = 0; i< va ;i++){
+            const main = document.querySelector(".floor-box")
+            const sec = document.createElement("section")
+            sec.classList.add("floor");
+            main.appendChild(sec)
+        }
+        // if (floor.value === "" || liftInput.value === "") {
+        //     btn.disabled = true;
+        //     return false;
+        //   } else {
+        //     return true;
+        //   }
+        
+        
     } 
     
-    for (i = 0; i< floor;i++){
-        const main = document.querySelector(".floor-box")
-        const sec = document.createElement("section")
-        sec.classList.add("floor");
-        main.appendChild(sec)
-    }
     
   
 
