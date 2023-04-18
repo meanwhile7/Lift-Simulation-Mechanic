@@ -92,9 +92,6 @@ input[type="text"] {
   height: 100vh;
 }
 
-
-
-/* CSS */
 .button {
   align-items: center;
   appearance: none;
@@ -142,7 +139,7 @@ input[type="text"] {
 
 
 
-/* end of inout page css */
+/* end of input page css */
 
 
 
@@ -183,8 +180,14 @@ input[type="text"] {
     width: 6.6vw;
 }
 
+.lift.right.left{
+  flex-basis: 50%;
+}
 
-
+.btn-section{
+  display: grid;
+  gap: 4px;
+}
 
 button{
 
@@ -214,7 +217,5 @@ button:active{
 
 /* Transition lift css */
 
-.lift#lift-1{
 
-}
 
