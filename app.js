@@ -24,29 +24,16 @@ input2.addEventListener("input", checkInputs);
 //
 
 let va = 0
-const floor = document.querySelector("#num-floor")
-const liftInput = document.getElementById("num-lift");
-
-floor.addEventListener('change',(e)=>{
+input1.addEventListener('change',(e)=>{        //store value of 
     va = e.target.value
 })
-
     function returnVa(){
-        const floor = document.getElementById("num-floor")
-        floor.addEventListener
-        const liftInput = document.getElementById("num-lift");
         for (i = 0; i< va ;i++){
             const main = document.querySelector(".floor-box")
             const sec = document.createElement("section")
             sec.classList.add("floor");
             main.appendChild(sec)
         }
-        // if (floor.value === "" || liftInput.value === "") {
-        //     btn.disabled = true;
-        //     return false;
-        //   } else {
-        //     return true;
-        //   }
         
         
     } 
