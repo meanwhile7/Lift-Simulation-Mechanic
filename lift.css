@@ -5,7 +5,12 @@ body {
   background-color: #a0d2eb
 }
 
-
+.bac-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+}
 
 /* these is input page css */
 
