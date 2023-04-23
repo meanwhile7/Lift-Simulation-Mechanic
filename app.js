@@ -78,7 +78,6 @@ function createFloor() {
       }
     }
   }
-    // 
     
     
 
@@ -90,32 +89,12 @@ function createFloor() {
         const floorNum = btn.id.split("-")[1];
         console.log(floorNum)
         const floor = Array.from(floors)[index];
-        // const floor = document.querySelectorAll(`#floor-${floorNum}`);
+        const floorHeight = floor.offsetHeight + 5;
+        console.log(floorHeight)
         console.log(floor)
-        lift.style.transform = `translateY(${-180  * (floorNum - 1)}px)`;
+        lift.style.transform = `translateY(${-(floorHeight )  * (floorNum - 1)}px)`;
 
-        // const rect = floor?.getBoundingClientRect();
-        // console.log(rect)
-        // const lift = document.querySelector(`#lift-${btn.id.split("-")[1]}`);
-        // lift.style.transform = `translateY(-${rect.top}px)`;
       });
     });
-
-
-
-
-  // const lift = document.querySelector(".lift");
-  // const floors = document.querySelectorAll(".floor");
-  // const btns = document.querySelectorAll(".btn-up");
-
-  // btns.forEach((btn, index) => {
-  //   btn.addEventListener("click", () => {
-  //     const floor = Array.from(floors)[index];
-  //     console.log(floor)
-  //     const rect = floor.getBoundingClientRect();
-  //     // console.log(rect.top);
-  //     lift.style.transform = `translateY(-${rect.top}px)`;
-  //   });
-  // });
     
 }
