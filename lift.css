@@ -172,7 +172,7 @@ input[type="text"] {
 
 .floor-section{
     display: flex;
-
+    gap:12px
 }
 
 .lift{
