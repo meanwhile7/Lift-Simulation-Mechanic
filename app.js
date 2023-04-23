@@ -117,25 +117,5 @@ function createFloor() {
   //     lift.style.transform = `translateY(-${rect.top}px)`;
   //   });
   // });
-
-
-
-
-
-
-
-
-
-    // const lift = document.querySelector(".lift")
-    // const floors =  document.querySelectorAll(".floor")
-    
-    // floors.forEach(floor => {
-    //   const btn = document.querySelector("#up-3")
-    //   btn.addEventListener("click",()=>{
-    //     const rect = floor.getBoundingClientRect();
-    //     console.log(rect.top)
-    //     lift.style.transform= `translateY(-${rect.top}px)`
-    //   })
-    // });
     
 }
