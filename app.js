@@ -6,8 +6,7 @@ const myButton = document.getElementById("btn");
 
 
 function checkInputs() {
-  input1.addEventListener("input", checkInputs);
-  input2.addEventListener("input", checkInputs);
+  
   if (input1.value < 0 || input2.value < 0) {
     myButton.disabled = true;
     alert("negative number not allowed");
@@ -22,20 +21,14 @@ function checkInputs() {
   }
 }
 
-function onClickButton() {
-  
-  checkInputs();
-}
+input1.addEventListener("input", checkInputs);
+input2.addEventListener("input", checkInputs);
 
-myButton.addEventListener("click", onClickButton);
+myButton.addEventListener("click", checkInputs());
 
-
-
-// trying different values
 
 function createFloor() {
   const main = document.querySelector(".floor-box");
-
   for (i = 0; i < input1.value ; i++) {
 
     // create back button 
@@ -52,13 +45,14 @@ function createFloor() {
     const bnt_down = document.createElement("button");
     
     sec.classList.add("floor");
+    sec.setAttribute("id",`floor-${i + 1}"`)
     div.classList.add("floor-section");
     div2.classList.add("btn-section");
     h1.textContent = `floor ${i + 1}`;
     bnt_up.setAttribute("id",`up-${i+1}`)
     bnt_down.setAttribute("id",`down-${i+1}`)
-    bnt_up.classList.add("btn");
-    bnt_down.classList.add("btn");
+    bnt_up.classList.add("btn" , "btn-up");
+    bnt_down.classList.add("btn", "btn-down");
     bnt_up.textContent = "Up";
     bnt_down.textContent = "Down";
     
@@ -84,38 +78,64 @@ function createFloor() {
       }
     }
   }
-    const upbtn = document.getElementById("up-2")
-    upbtn.addEventListener("click",function() {
-    const lift = document.querySelector('.lift');
-    moveLiftUp();
-    })
-}
-//   for (r=0 ; r < input1.value ; r++){
-
-//     const upbtn = document.getElementById(`up-${r}`)
-//     upbtn.addEventListener("click",function() {
-//     const lift = document.querySelector('.lift');
-//     console.log("upbtn")
-//     const rec = lift.getBoundingClientRect();
-//     moveLiftUp();
-//   // console.log(rec)
-// })
-//  
+    // 
+    
     
 
+    const upbtns = document.querySelectorAll(".floor .btn-up");
+    const floors = document.querySelectorAll(".floor");
+    upbtns.forEach((btn,index) => {
+      btn.addEventListener("click", function() {
+        const lift = document.querySelector('.lift');
+        const floorNum = btn.id.split("-")[1];
+        console.log(floorNum)
+        const floor = Array.from(floors)[index];
+        // const floor = document.querySelectorAll(`#floor-${floorNum}`);
+        console.log(floor)
+        lift.style.transform = `translateY(${-180  * (floorNum - 1)}px)`;
 
-// const floorButtons = document.querySelectorAll('.btn');
+        // const rect = floor?.getBoundingClientRect();
+        // console.log(rect)
+        // const lift = document.querySelector(`#lift-${btn.id.split("-")[1]}`);
+        // lift.style.transform = `translateY(-${rect.top}px)`;
+      });
+    });
 
-// // Attach event listener to each button
-// btn.forEach(btn => {
-//  btn.addEventListener('click', moveLiftUp);
-// });
 
-//moving the lift
 
-function moveLiftUp() {
 
-  const lift = document.querySelector('.lift');
-  lift.style.transform = "translateY(-180px)"
+  // const lift = document.querySelector(".lift");
+  // const floors = document.querySelectorAll(".floor");
+  // const btns = document.querySelectorAll(".btn-up");
 
+  // btns.forEach((btn, index) => {
+  //   btn.addEventListener("click", () => {
+  //     const floor = Array.from(floors)[index];
+  //     console.log(floor)
+  //     const rect = floor.getBoundingClientRect();
+  //     // console.log(rect.top);
+  //     lift.style.transform = `translateY(-${rect.top}px)`;
+  //   });
+  // });
+
+
+
+
+
+
+
+
+
+    // const lift = document.querySelector(".lift")
+    // const floors =  document.querySelectorAll(".floor")
+    
+    // floors.forEach(floor => {
+    //   const btn = document.querySelector("#up-3")
+    //   btn.addEventListener("click",()=>{
+    //     const rect = floor.getBoundingClientRect();
+    //     console.log(rect.top)
+    //     lift.style.transform= `translateY(-${rect.top}px)`
+    //   })
+    // });
+    
 }
