@@ -79,22 +79,38 @@ function createFloor() {
     }
   }
     
-    
-
-    const upbtns = document.querySelectorAll(".floor .btn-up");
-    const floors = document.querySelectorAll(".floor");
-    upbtns.forEach((btn,index) => {
-      btn.addEventListener("click", function() {
-        const lift = document.querySelector('.lift');
-        const floorNum = btn.id.split("-")[1];
-        console.log(floorNum)
-        const floor = Array.from(floors)[index];
-        const floorHeight = floor.offsetHeight + 5;
-        console.log(floorHeight)
-        console.log(floor)
+  let currentFloor = 1; // initialize the current floor to 1
+  const upbtns = document.querySelectorAll(".floor .btn-up");
+  const downbtns = document.querySelectorAll(".floor .btn-down");
+  const floors = document.querySelectorAll(".floor");
+  upbtns.forEach((btn,index) => {
+    btn.addEventListener("click", function() {
+      const lift = document.querySelector('.lift');
+      const floorNum = btn.id.split("-")[1];
+      const floor = Array.from(floors)[index];
+      const floorHeight = floor.offsetHeight + 5;
+  
+      // check if the lift is already on the requested floor or not
+      if (currentFloor < floorNum) {
         lift.style.transform = `translateY(${-(floorHeight )  * (floorNum - 1)}px)`;
+        currentFloor = floorNum; // update the current floor
 
-      });
+      }
     });
-    
+  });
+  
+  downbtns.forEach((btn, index) => {
+    btn.addEventListener("click", function() {
+      const lift = document.querySelector('.lift');
+      const floorNum = btn.id.split("-")[1];
+      const floor = Array.from(floors)[index];
+      const floorHeight = floor.offsetHeight + 5;
+  
+      // check if the lift is already on the requested floor or not
+      if (currentFloor > floorNum) {
+        lift.style.transform = `translateY(${-floorHeight * (floorNum - 1)}px)`;
+        currentFloor = floorNum; // update the current floor
+      }
+    });
+  });  
 }
