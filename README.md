@@ -8,4 +8,4 @@ This project was implemented using HTML, CSS, and JavaScript. It demonstrates th
 
 To run the project, simply download the HTML, CSS, and JavaScript files and open the HTML file in a web browser. You will need an internet connection to load the CSS and JavaScript files.
 
-**Project still in progress**
+**(Some functions not yet implemented)Project still in progress**
