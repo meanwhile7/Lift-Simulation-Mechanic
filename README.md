@@ -1,6 +1,6 @@
 Title: Lift Simulation
 
-This project is a web-based simulation of a lift system that can handle multiple lifts and floors. It allows users to input the number of floors and lifts that they want the system to manage. The simulation then generates the required number of floors and lifts.
+This project is a web-based simulation of a lift system that can handle multiple lifts(**For now only one lift works**) and floors. It allows users to input the number of floors and lifts that they want the system to manage. The simulation then generates the required number of floors and lifts.
 
 The user can press the up or down button on each floor to signal the lift to go up or down, respectively. The system then calculates the fastest route for the lift to reach the designated floor and displays the lift's movement using CSS animations.
 
