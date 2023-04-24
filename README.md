@@ -7,3 +7,5 @@ The user can press the up or down button on each floor to signal the lift to go 
 This project was implemented using HTML, CSS, and JavaScript. It demonstrates the use of event listeners, DOM manipulation, and conditional statements in JavaScript. It also showcases the use of CSS animations and transitions for a more visually appealing interface.
 
 To run the project, simply download the HTML, CSS, and JavaScript files and open the HTML file in a web browser. You will need an internet connection to load the CSS and JavaScript files.
+
+**Project still in progress**
