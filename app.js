@@ -86,7 +86,7 @@ function createFloor() {
   const floors = document.querySelectorAll(".floor");
   upbtns.forEach((btn,index) => {
     btn.addEventListener("click", function() {
-      const lift = document.querySelector('#lift-2');
+      const lift = document.querySelector('.lift');
       const floorNum = btn.id.split("-")[1];
       const floor = Array.from(floors)[index];
       const floorHeight = floor.offsetHeight + 5;
@@ -102,7 +102,7 @@ function createFloor() {
   
   downbtns.forEach((btn, index) => {
     btn.addEventListener("click", function() {
-      const lift = document.querySelector('#lift-2');
+      const lift = document.querySelector('.lift');
       const floorNum = btn.id.split("-")[1];
       const floor = Array.from(floors)[index];
       const floorHeight = floor.offsetHeight + 5;
