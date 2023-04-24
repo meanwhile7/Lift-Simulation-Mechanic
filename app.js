@@ -33,7 +33,8 @@ function createFloor() {
 
     // create back button 
     if (i==0){
-      const bac = document.createElement("input")
+      const bac = document.createElement("button")
+      bac.textContent = "Back"
       bac.classList.add("bac-btn")
       main.appendChild(bac)
     }
@@ -85,7 +86,7 @@ function createFloor() {
   const floors = document.querySelectorAll(".floor");
   upbtns.forEach((btn,index) => {
     btn.addEventListener("click", function() {
-      const lift = document.querySelector('.lift');
+      const lift = document.querySelector('#lift-2');
       const floorNum = btn.id.split("-")[1];
       const floor = Array.from(floors)[index];
       const floorHeight = floor.offsetHeight + 5;
@@ -101,7 +102,7 @@ function createFloor() {
   
   downbtns.forEach((btn, index) => {
     btn.addEventListener("click", function() {
-      const lift = document.querySelector('.lift');
+      const lift = document.querySelector('#lift-2');
       const floorNum = btn.id.split("-")[1];
       const floor = Array.from(floors)[index];
       const floorHeight = floor.offsetHeight + 5;
@@ -112,5 +113,15 @@ function createFloor() {
         currentFloor = floorNum; // update the current floor
       }
     });
-  });  
+  });
+  
+  //back button 
+
+  back = document.querySelector(".bac-btn")
+  back.addEventListener("click",()=>{
+    location.reload();
+  })
+
+
+
 }
