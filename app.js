@@ -80,41 +80,76 @@ function createFloor() {
     }
   }
     
+
+
   let currentFloor = 1; // initialize the current floor to 1
   const upbtns = document.querySelectorAll(".floor .btn-up");
   const downbtns = document.querySelectorAll(".floor .btn-down");
   const floors = document.querySelectorAll(".floor");
-  upbtns.forEach((btn,index) => {
-    btn.addEventListener("click", function() {
-      const lift = document.querySelector('#lift-2');
-      const floorNum = btn.id.split("-")[1];
-      const floor = Array.from(floors)[index];
-      const floorHeight = floor.offsetHeight + 5;
-  
-      // check if the lift is already on the requested floor or not
-      if (currentFloor < floorNum) {
-        lift.style.transform = `translateY(${-(floorHeight )  * (floorNum - 1)}px)`;
-        currentFloor = floorNum; // update the current floor
 
-      }
-    });
-  });
+  function onFloorChange(floorNum) {
+    console.log(`Lift moved to floor ${floorNum}`);
+    lift(floorNum);
+  }
+
+  function lift(floorNum=1) {
+    const lift = document.querySelector(".lift");
+    lift.setAttribute("data-current-floor", floorNum);
+    return lift.getAttribute("data-current-floor");
+  }
   
-  downbtns.forEach((btn, index) => {
+
+function moveLift(buttons, direction , onFloorChange) {
+    
+  buttons.forEach((btn, index) => {
+    liftui =lift()
     btn.addEventListener("click", function() {
-      const lift = document.querySelector('#lift-2');
+      console.log(liftui)
+      const lift = document.querySelector(`#lift-${liftui}`);
       const floorNum = btn.id.split("-")[1];
       const floor = Array.from(floors)[index];
       const floorHeight = floor.offsetHeight + 5;
-  
-      // check if the lift is already on the requested floor or not
-      if (currentFloor > floorNum) {
+
+      if (direction === 'up' && currentFloor < floorNum) {
+        lift.style.transform = `translateY(${-(floorHeight) * (floorNum - 1)}px)`;
+        currentFloor = floorNum;
+      } else if (direction === 'down' && currentFloor > floorNum) {
         lift.style.transform = `translateY(${-floorHeight * (floorNum - 1)}px)`;
-        currentFloor = floorNum; // update the current floor
+        currentFloor = floorNum;
       }
+      console.log(liftui)
+      // adding data attribute
+      lift.setAttribute("data-current-floor", floorNum);
+      
+      // call the callback function when the floor changes
+      onFloorChange(floorNum);
     });
   });
-  
+}
+
+
+
+moveLift(upbtns, 'up', onFloorChange);
+moveLift(downbtns, 'down', onFloorChange);
+
+
+// function lift(){
+      
+  //   const lifgen = document.querySelectorAll(".lift")
+  //   lifgen.forEach((data-current-floor, floorNum), =>{
+  //     if (dataCurrentFloor === floorNum){
+  //       const liftno = liftno.id.split("-")[1]
+  //     }
+      
+  //     return 
+      
+  //   })
+  // }
+
+
+
+
+
   //back button 
 
   back = document.querySelector(".bac-btn")
@@ -122,6 +157,6 @@ function createFloor() {
     location.reload();
   })
 
-
+  
 
 }
