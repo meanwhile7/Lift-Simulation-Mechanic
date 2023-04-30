@@ -72,8 +72,8 @@ function createFloor() {
         const rightSpan = document.createElement("span");
         lift.classList.add("lift");
         lift.setAttribute("id", `lift-${j + 1}`);
-        leftSpan.classList.add("left");
-        rightSpan.classList.add("right");
+        leftSpan.classList.add("left", "door");
+        rightSpan.classList.add("right", "door");
         lift.appendChild(leftSpan);
         lift.appendChild(rightSpan);
         floorDiv.appendChild(lift);
