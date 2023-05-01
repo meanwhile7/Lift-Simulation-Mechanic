@@ -4,6 +4,7 @@ const input1 = document.getElementById("num-floor");
 const input2 = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
 let availableLifts = [];
+busy = [];
 
 function checkInputs() {
   if (input1.value < 0 || input2.value < 0) {
@@ -84,8 +85,7 @@ function createFloor() {
   const downbtns = document.querySelectorAll(".floor .btn-down");
   const floors = document.querySelectorAll(".floor");
   let currentFloor = 1;
-  avai = [];
-  busy = [];
+ 
 
   function runElevator() {
     moveLift(upbtns, "up");
@@ -96,7 +96,9 @@ function createFloor() {
     buttons.forEach((btn, index) => {
       btn.addEventListener("click", function () {
         let currentLiftId = availableLifts[0];
+        let liftfloor=1
         const lift = document.querySelector(`#${currentLiftId}`);
+
         const floorNum = parseInt(btn.id.split("-")[1]);
         const floor = Array.from(floors)[index];
         const floorHeight = floor.offsetHeight + 5;
@@ -116,8 +118,14 @@ function createFloor() {
           console.log(
             `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
           );
+          lift.setAttribute('data-presentfloor', floorNum); // set the data attribute for the current floor
+
           currentFloor = floorNum;
         }
+
+        // Set the currentfloor data attribute of the lift to the currentFloor variable
+        liftfloor = lift.dataset.currentfloor = currentFloor;
+        console.log(` ${lift.id} is on floor ${liftfloor}`)
         // Add the lift to the busy lifts array and remove it from the available lifts array
         busy.push(currentLiftId);
         availableLifts.splice(availableLifts.indexOf(currentLiftId), 1);
