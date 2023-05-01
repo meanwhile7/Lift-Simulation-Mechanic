@@ -3,6 +3,7 @@
 const input1 = document.getElementById("num-floor");
 const input2 = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
+let availableLifts=[]
 
 
 function checkInputs() {
@@ -71,7 +72,8 @@ function createFloor() {
         const leftSpan = document.createElement("span");
         const rightSpan = document.createElement("span");
         lift.classList.add("lift");
-        lift.setAttribute("id", `lift-${j + 1}`);
+        lift.setAttribute("id", `lift-${j + 1}`)
+        availableLifts.push(lift.id);
         leftSpan.classList.add("left", "door");
         rightSpan.classList.add("right", "door");
         lift.appendChild(leftSpan);
@@ -90,34 +92,27 @@ function createFloor() {
   const downbtns = document.querySelectorAll(".floor .btn-down");
   const floors = document.querySelectorAll(".floor");
   let currentFloor = 1;
-  let floorNum;
+  avai=[]
+  busy=[]
+  let currentLiftId = null;
+
 
 function runElevator() {
   
-  lift();
   moveLift(upbtns, 'up');
   moveLift(downbtns, 'down');
 
 }
 
-function lift(floorNum) {
-  const lifts = document.querySelectorAll('.lift');
-  
-  lifts.forEach((lift, index,floorNum) => {
-    const floorno =Array.from(floorNum)[1]
-    console.log(`lif ${floorno}`)
-    console.log(lift)
-    lift.setAttribute('data-current-floor', currentFloor);
-  });
-}
 
 function moveLift(buttons, direction) {
   buttons.forEach((btn, index) => {
     
     btn.addEventListener('click', function() {
-      const lift = document.querySelector('.lift[data-current-floor]');
-      console.log(lift)
-      floorNum = parseInt(btn.id.split('-')[1]);
+      let currentLiftId = availableLifts[0];
+      const lift = document.querySelector(`#${currentLiftId}`);
+      console.log(currentLiftId)
+      const floorNum = parseInt(btn.id.split('-')[1]);
       const floor = Array.from(floors)[index];
       const floorHeight = floor.offsetHeight + 5;
 
@@ -130,8 +125,13 @@ function moveLift(buttons, direction) {
         console.log(`The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`);
         currentFloor = floorNum;
       }
+          // Add the lift to the busy lifts array and remove it from the available lifts array
+          busy.push(currentLiftId);
+          availableLifts.splice(availableLifts.indexOf(currentLiftId), 1);
 
-      lift.setAttribute('data-current-floor', floorNum);
+          console.log("Available lifts: ", availableLifts);
+          console.log("Busy lifts: ", busy);
+
     });
   });
 }
