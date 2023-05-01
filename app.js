@@ -3,11 +3,9 @@
 const input1 = document.getElementById("num-floor");
 const input2 = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
-let availableLifts=[]
-
+let availableLifts = [];
 
 function checkInputs() {
-  
   if (input1.value < 0 || input2.value < 0) {
     myButton.disabled = true;
     alert("negative number not allowed");
@@ -27,12 +25,10 @@ input2.addEventListener("input", checkInputs);
 
 myButton.addEventListener("click", checkInputs());
 
-
 function createFloor() {
   const main = document.querySelector(".floor-box");
   for (let i = 0; i < input1.value; i++) {
-
-    // create back button 
+    // create back button
     if (i === 0) {
       const bac = document.createElement("button");
       bac.textContent = "Back";
@@ -72,7 +68,7 @@ function createFloor() {
         const leftSpan = document.createElement("span");
         const rightSpan = document.createElement("span");
         lift.classList.add("lift");
-        lift.setAttribute("id", `lift-${j + 1}`)
+        lift.setAttribute("id", `lift-${j + 1}`);
         availableLifts.push(lift.id);
         leftSpan.classList.add("left", "door");
         rightSpan.classList.add("right", "door");
@@ -83,69 +79,61 @@ function createFloor() {
     }
   }
 
-
-    
-
-
   // let currentFloor = 1; // initialize the current floor to 1
   const upbtns = document.querySelectorAll(".floor .btn-up");
   const downbtns = document.querySelectorAll(".floor .btn-down");
   const floors = document.querySelectorAll(".floor");
   let currentFloor = 1;
-  avai=[]
-  busy=[]
-  let currentLiftId = null;
+  avai = [];
+  busy = [];
 
+  function runElevator() {
+    moveLift(upbtns, "up");
+    moveLift(downbtns, "down");
+  }
 
-function runElevator() {
-  
-  moveLift(upbtns, 'up');
-  moveLift(downbtns, 'down');
+  function moveLift(buttons, direction) {
+    buttons.forEach((btn, index) => {
+      btn.addEventListener("click", function () {
+        let currentLiftId = availableLifts[0];
+        const lift = document.querySelector(`#${currentLiftId}`);
+        const floorNum = parseInt(btn.id.split("-")[1]);
+        const floor = Array.from(floors)[index];
+        const floorHeight = floor.offsetHeight + 5;
 
-}
+        if (direction === "up" && currentFloor < floorNum) {
+          lift.style.transform = `translateY(${
+            -floorHeight * (floorNum - 1)
+          }px)`;
+          console.log(
+            `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
+          );
+          currentFloor = floorNum;
+        } else if (direction === "down" && currentFloor > floorNum) {
+          lift.style.transform = `translateY(${
+            -floorHeight * (floorNum - 1)
+          }px)`;
+          console.log(
+            `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
+          );
+          currentFloor = floorNum;
+        }
+        // Add the lift to the busy lifts array and remove it from the available lifts array
+        busy.push(currentLiftId);
+        availableLifts.splice(availableLifts.indexOf(currentLiftId), 1);
 
-
-function moveLift(buttons, direction) {
-  buttons.forEach((btn, index) => {
-    
-    btn.addEventListener('click', function() {
-      let currentLiftId = availableLifts[0];
-      const lift = document.querySelector(`#${currentLiftId}`);
-      console.log(currentLiftId)
-      const floorNum = parseInt(btn.id.split('-')[1]);
-      const floor = Array.from(floors)[index];
-      const floorHeight = floor.offsetHeight + 5;
-
-      if (direction === 'up' && currentFloor < floorNum) {
-        lift.style.transform = `translateY(${-(floorHeight) * (floorNum - 1)}px)`;
-        console.log(`The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`);
-        currentFloor = floorNum;
-      } else if (direction === 'down' && currentFloor > floorNum) {
-        lift.style.transform = `translateY(${-floorHeight * (floorNum - 1)}px)`;
-        console.log(`The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`);
-        currentFloor = floorNum;
-      }
-          // Add the lift to the busy lifts array and remove it from the available lifts array
-          busy.push(currentLiftId);
-          availableLifts.splice(availableLifts.indexOf(currentLiftId), 1);
-
-          console.log("Available lifts: ", availableLifts);
-          console.log("Busy lifts: ", busy);
-
+        console.log("Available lifts: ", availableLifts);
+        console.log("Busy lifts: ", busy);
+      });
     });
-  });
-}
+  }
 
-runElevator();
+  runElevator();
 
+  //back button
 
-  //back button 
-
-  back = document.querySelector(".bac-btn")
-  back.addEventListener("click",()=>{
+  back = document.querySelector(".bac-btn");
+  back.addEventListener("click", () => {
     location.reload();
-  })
-
-  
-
+  });
 }
