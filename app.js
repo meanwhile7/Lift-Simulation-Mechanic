@@ -4,7 +4,7 @@ const input1 = document.getElementById("num-floor");
 const input2 = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
 let availableLifts = [];
-busy = [];
+
 
 function checkInputs() {
   if (input1.value < 0 || input2.value < 0) {
@@ -85,7 +85,9 @@ function createFloor() {
   const downbtns = document.querySelectorAll(".floor .btn-down");
   const floors = document.querySelectorAll(".floor");
   let currentFloor = 1;
- 
+  busy = [];
+  // Define a map to store the previous floor value for each lift
+const prevFloorMap = new Map();
 
   function runElevator() {
     moveLift(upbtns, "up");
@@ -95,21 +97,29 @@ function createFloor() {
   function moveLift(buttons, direction) {
     buttons.forEach((btn, index) => {
       btn.addEventListener("click", function () {
-        let currentLiftId = availableLifts[0];
-        let liftfloor=1
-        const lift = document.querySelector(`#${currentLiftId}`);
+        
+        // setting floor number and floor height 
 
         const floorNum = parseInt(btn.id.split("-")[1]);
         const floor = Array.from(floors)[index];
         const floorHeight = floor.offsetHeight + 5;
 
+        //lift selecting part
+        let currentLiftId = availableLifts[0];
+        const lift = document.querySelector(`#${currentLiftId}`);
+
+          // logic part for moving lift  (need to update) 
         if (direction === "up" && currentFloor < floorNum) {
           lift.style.transform = `translateY(${
             -floorHeight * (floorNum - 1)
           }px)`;
+
           console.log(
             `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
           );
+          // Set the currentfloor data attribute of the lift to the liftfloor variable
+        lift.dataset.currentfloor = floorNum;
+          
           currentFloor = floorNum;
         } else if (direction === "down" && currentFloor > floorNum) {
           lift.style.transform = `translateY(${
@@ -118,14 +128,27 @@ function createFloor() {
           console.log(
             `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
           );
-          lift.setAttribute('data-presentfloor', floorNum); // set the data attribute for the current floor
+        
+          // Set the currentfloor data attribute of the lift to the liftfloor variable
+        lift.dataset.currentfloor = floorNum;
 
           currentFloor = floorNum;
         }
 
-        // Set the currentfloor data attribute of the lift to the currentFloor variable
-        liftfloor = lift.dataset.currentfloor = currentFloor;
-        console.log(` ${lift.id} is on floor ${liftfloor}`)
+        // Set the currentfloor data attribute of the lift to the liftfloor variable
+        lift.dataset.currentfloor = currentFloor;
+        
+        // Get the previous floor value for the current lift from the prevFloorMap
+        const prevFloor = prevFloorMap.get(currentLiftId);
+
+        // If the previous floor value exists, set the prevfloor data attribute of the lift to the previous floor value
+        if (prevFloor !== undefined) {
+          lift.dataset.prevfloor = prevFloor;
+        }
+
+        // Update the prevFloorMap with the current floor number as the previous floor value for the current lift
+        prevFloorMap.set(currentLiftId, currentFloor);
+        console.log(prevFloorMap)
         // Add the lift to the busy lifts array and remove it from the available lifts array
         busy.push(currentLiftId);
         availableLifts.splice(availableLifts.indexOf(currentLiftId), 1);
