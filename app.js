@@ -5,7 +5,6 @@ const input2 = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
 let availableLifts = [];
 
-
 function checkInputs() {
   if (input1.value < 0 || input2.value < 0) {
     myButton.disabled = true;
@@ -71,8 +70,8 @@ function createFloor() {
         lift.classList.add("lift");
         lift.setAttribute("id", `lift-${j + 1}`);
         availableLifts.push(lift.id);
-        leftSpan.classList.add("left", "door");
-        rightSpan.classList.add("right", "door");
+        leftSpan.classList.add("door");
+        rightSpan.classList.add("door");
         lift.appendChild(leftSpan);
         lift.appendChild(rightSpan);
         floorDiv.appendChild(lift);
@@ -87,7 +86,7 @@ function createFloor() {
   let currentFloor = 1;
   busy = [];
   // Define a map to store the previous floor value for each lift
-const prevFloorMap = new Map();
+  const currFloorMap = new Map();
 
   function runElevator() {
     moveLift(upbtns, "up");
@@ -97,8 +96,7 @@ const prevFloorMap = new Map();
   function moveLift(buttons, direction) {
     buttons.forEach((btn, index) => {
       btn.addEventListener("click", function () {
-        
-        // setting floor number and floor height 
+        // setting floor number and floor height
 
         const floorNum = parseInt(btn.id.split("-")[1]);
         const floor = Array.from(floors)[index];
@@ -108,53 +106,52 @@ const prevFloorMap = new Map();
         let currentLiftId = availableLifts[0];
         const lift = document.querySelector(`#${currentLiftId}`);
 
-          // logic part for moving lift  (need to update) 
-        if (direction === "up" && currentFloor < floorNum) {
-          lift.style.transform = `translateY(${
-            -floorHeight * (floorNum - 1)
-          }px)`;
+        // Set data attribute to indicate lift is busy
+        lift.dataset.status = "busy";
 
-          console.log(
-            `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
-          );
-          // Set the currentfloor data attribute of the lift to the liftfloor variable
+        // logic part for moving lift  (need to update)
+
+        lift.style.transform = `translateY(${-floorHeight * (floorNum - 1)}px)`;
+
+        console.log(
+          `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
+        );
+
+        // Calculate the transition duration based on the floor number
+        const transitionDuration = floorNum * 1; // Increase duration with floor number
+
+        lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
+        // Set the currentfloor data attribute of the lift to the liftfloor variable
         lift.dataset.currentfloor = floorNum;
-          
-          currentFloor = floorNum;
-        } else if (direction === "down" && currentFloor > floorNum) {
-          lift.style.transform = `translateY(${
-            -floorHeight * (floorNum - 1)
-          }px)`;
-          console.log(
-            `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
-          );
-        
-          // Set the currentfloor data attribute of the lift to the liftfloor variable
-        lift.dataset.currentfloor = floorNum;
-
-          currentFloor = floorNum;
-        }
-
+        lift.dataset.previousfloor = currentFloor;
+        currentFloor = floorNum;
         // Set the currentfloor data attribute of the lift to the liftfloor variable
         lift.dataset.currentfloor = currentFloor;
-        
+
         // Get the previous floor value for the current lift from the prevFloorMap
-        const prevFloor = prevFloorMap.get(currentLiftId);
+        const currFloor = currFloorMap.get(currentLiftId);
 
         // If the previous floor value exists, set the prevfloor data attribute of the lift to the previous floor value
-        if (prevFloor !== undefined) {
-          lift.dataset.prevfloor = prevFloor;
+        if (currFloor !== undefined) {
+          lift.dataset.currfloor = currFloor;
         }
 
         // Update the prevFloorMap with the current floor number as the previous floor value for the current lift
-        prevFloorMap.set(currentLiftId, currentFloor);
-        console.log(prevFloorMap)
+        currFloorMap.set(currentLiftId, currentFloor);
+        console.log(currFloorMap);
         // Add the lift to the busy lifts array and remove it from the available lifts array
         busy.push(currentLiftId);
         availableLifts.splice(availableLifts.indexOf(currentLiftId), 1);
 
         console.log("Available lifts: ", availableLifts);
         console.log("Busy lifts: ", busy);
+
+        // Remove the busy status data attribute when the lift transition ends
+        lift.addEventListener("transitionend", function () {
+          lift.dataset.status = "free";
+          
+          // Clear the status data attribute
+        });
       });
     });
   }
