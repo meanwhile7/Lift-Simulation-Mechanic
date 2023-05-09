@@ -186,9 +186,13 @@ input[type="text"] {
     width: 6.6vw;
 }
 
-.lift.right.left{
-  flex-basis: 50%;
+.door {
+	margin: 1px;
+	background: rgba(0,0,0,0.5);
+	width: 45%;
 }
+
+
 
 .btn-section{
   display: grid;
