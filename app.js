@@ -3,7 +3,6 @@
 const input1 = document.getElementById("num-floor");
 const input2 = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
-let availableLifts = [];
 
 function checkInputs() {
   if (input1.value < 0 || input2.value < 0) {
@@ -65,15 +64,17 @@ function createFloor() {
     for (let j = 0; j < input2.value; j++) {
       if (i === 0) {
         const lift = document.createElement("div");
+        const door = document.createElement("div")
         const leftSpan = document.createElement("span");
         const rightSpan = document.createElement("span");
         lift.classList.add("lift");
         lift.setAttribute("id", `lift-${j + 1}`);
-        availableLifts.push(lift.id);
-        leftSpan.classList.add("door");
-        rightSpan.classList.add("door");
-        lift.appendChild(leftSpan);
-        lift.appendChild(rightSpan);
+        door.classList.add("door")
+        leftSpan.classList.add("left");
+        rightSpan.classList.add("right");
+        lift.appendChild(door)
+        door.appendChild(leftSpan);
+        door.appendChild(rightSpan);
         floorDiv.appendChild(lift);
       }
     }
@@ -84,7 +85,7 @@ function createFloor() {
   const downbtns = document.querySelectorAll(".floor .btn-down");
   const floors = document.querySelectorAll(".floor");
   let currentFloor = 1;
-  busy = [];
+
   // Define a map to store the previous floor value for each lift
 
   function runElevator() {
@@ -92,11 +93,10 @@ function createFloor() {
     moveLift(downbtns, "down");
   }
 
-  const lifts = document.querySelectorAll(".lift")
-  lifts.forEach((lift)=>{
-    lift.dataset.status="free"
-  })
-  
+  const lifts = document.querySelectorAll(".lift");
+  lifts.forEach((lift) => {
+    lift.dataset.status = "free";
+  });
 
   function moveLift(buttons, direction) {
     buttons.forEach((btn, index) => {
@@ -105,52 +105,65 @@ function createFloor() {
         const floor = Array.from(floors)[index];
         const floorHeight = floor.offsetHeight + 5;
 
-        const liftArray = Array.from(lifts)
-        const freeLifts = liftArray.find((lift) => lift.dataset.status === "free");
-        console.log(freeLifts)
+        const liftArray = Array.from(lifts);
+        const freeLifts = liftArray.find(
+          (lift) => lift.dataset.status === "free"
+        );
 
-        let currentLiftId = availableLifts[0];
-        const lift = document.querySelector(`#${currentLiftId}`);
-        
-  
+        const lift = freeLifts;
+
         lift.style.transform = `translateY(${-floorHeight * (floorNum - 1)}px)`;
         lift.dataset.status = "busy";
         console.log(
           `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
         );
-  
+
         const transitionDuration = floorNum * 1;
         lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
         lift.dataset.currentfloor = floorNum;
-        lift.dataset.previousfloor = currentFloor;
         currentFloor = floorNum;
         lift.dataset.currentfloor = currentFloor;
-  
-        const liftDoors = document.querySelectorAll(`#${currentLiftId} .door`);
-        liftDoors.forEach((door) => {
-          door.classList.add("open");
-        });
-  
-        busy.push(currentLiftId);
-        availableLifts.splice(availableLifts.indexOf(currentLiftId), 1);
-  
-        console.log("Available lifts: ", availableLifts);
-        console.log("Busy lifts: ", busy);
-  
+
         lift.addEventListener("transitionend", function () {
           lift.dataset.status = "free";
         });
-  
-        setTimeout(() => {
-          // doorOpenClose(lift);
+
+        function doorOpenClose(lift){
+          let door = lift.firstChild;
+          
           setTimeout(() => {
+            door.children[0].style.transform = "translateX( -40px)";
+            door.children[0].style.transition = "all 2.5s ease-in-out";
+        
+            door.children[1].style.transform = "translateX( 40px)";
+            door.children[1].style.transition = "all 2.5s ease-in-out";
+          }, 0 );
+        
+          setTimeout(() => {
+            door.children[0].style.transition = "all 2.5s ease-in-out";
+            door.children[0].style.transform = "translateX( 0px)";
+        
+            door.children[1].style.transition = "all 2.5s ease-in-out";
+            door.children[1].style.transform = "translateX(0px)";
+            
+          }
+          , 2500);
+          
+          // console.log("its working",un)
+
+        }
+
+        setTimeout(() => {
+          doorOpenClose(lift);
+          setTimeout(() => {
+            // console.log("hello")
             lift.dataset.status = "free";
           }, 5500);
-        }, Math.abs(floorNum) * 2000);
+        }, Math.abs(floorNum) * 1000);
       });
     });
   }
-  
+
   runElevator();
 
   //back button
