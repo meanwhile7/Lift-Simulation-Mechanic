@@ -8,15 +8,14 @@ function checkInputs() {
   if (input1.value < 0 || input2.value < 0) {
     myButton.disabled = true;
     alert("negative number not allowed");
-    location.reload();
-  } else {
+    return;
+  }
     if (input1.value > 0 && input2.value > 0) {
       container.style.display = "none";
       createFloor();
     } else {
       myButton.disabled = true;
     }
-  }
 }
 
 input1.addEventListener("input", checkInputs);
@@ -124,10 +123,6 @@ function createFloor() {
         currentFloor = floorNum;
         lift.dataset.currentfloor = currentFloor;
 
-        lift.addEventListener("transitionend", function () {
-          lift.dataset.status = "free";
-        });
-
         function doorOpenClose(lift){
           let door = lift.firstChild;
           
@@ -140,17 +135,9 @@ function createFloor() {
           }, 0 );
         
           setTimeout(() => {
-            door.children[0].style.transition = "all 2.5s ease-in-out";
-            door.children[0].style.transform = "translateX( 0px)";
-        
-            door.children[1].style.transition = "all 2.5s ease-in-out";
+            door.children[0].style.transform = "translateX(0px)";
             door.children[1].style.transform = "translateX(0px)";
-            
-          }
-          , 2500);
-          
-          // console.log("its working",un)
-
+          }, 2500);
         }
 
         setTimeout(() => {

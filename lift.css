@@ -182,8 +182,6 @@ input[type="text"] {
     gap: 4px;
     border-radius: 6px;
     display: flex;
-    height: 15vh;
-    width: 6.6vw;
 }
 
 .door {
