@@ -4,24 +4,33 @@ const input1 = document.getElementById("num-floor");
 const input2 = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
 
-function checkInputs() {
-  if (input1.value < 0 || input2.value < 0) {
+function checkInputs(inputValue1,inputValue2) {
+  if (inputValue1 > 0 && inputValue2 > 0) {
+    container.style.display = "none";
+    createFloor();
+  } else {
     myButton.disabled = true;
-    alert("negative number not allowed");
-    return;
   }
-    if (input1.value > 0 && input2.value > 0) {
-      container.style.display = "none";
-      createFloor();
-    } else {
-      myButton.disabled = true;
-    }
 }
 
-input1.addEventListener("input", checkInputs);
-input2.addEventListener("input", checkInputs);
+myButton.addEventListener("click", function() {
+  const inputValue1 = input1.value;
+  const inputValue2 = input2.value;
 
-myButton.addEventListener("click", checkInputs());
+  if (inputValue1 === '' || inputValue2 === ''){
+    alert("Please enter values for both inputs");
+    return;
+  } else{
+    if (inputValue1 < 0 || inputValue2 < 0) {
+      alert("negative number not allowed");
+      return;
+    }
+
+  }
+
+  checkInputs(inputValue1, inputValue2);
+  
+});
 
 function createFloor() {
   const main = document.querySelector(".floor-box");
