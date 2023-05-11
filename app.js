@@ -4,7 +4,7 @@ const input1 = document.getElementById("num-floor");
 const input2 = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
 
-function checkInputs(inputValue1,inputValue2) {
+function checkInputs(inputValue1, inputValue2) {
   if (inputValue1 > 0 && inputValue2 > 0) {
     container.style.display = "none";
     createFloor();
@@ -13,23 +13,26 @@ function checkInputs(inputValue1,inputValue2) {
   }
 }
 
-myButton.addEventListener("click", function() {
-  const inputValue1 = input1.value;
-  const inputValue2 = input2.value;
+myButton.addEventListener("click", function () {
+  const inputValue1 = parseInt(input1.value);
+  const inputValue2 = parseInt(input2.value);
 
-  if (inputValue1 === '' || inputValue2 === ''){
+  if (inputValue1 === "" || inputValue2 === "") {
     alert("Please enter values for both inputs");
     return;
-  } else{
-    if (inputValue1 < 0 || inputValue2 < 0) {
-      alert("negative number not allowed");
+  } else {
+    if (isNaN(inputValue1) || isNaN(inputValue2)) {
+      alert("Please enter valid integer values for both inputs");
       return;
+    } else {
+      if (inputValue1 < 0 || inputValue2 < 0) {
+        alert("negative number not allowed");
+        return;
+      }
     }
-
   }
 
   checkInputs(inputValue1, inputValue2);
-  
 });
 
 function createFloor() {
@@ -72,15 +75,15 @@ function createFloor() {
     for (let j = 0; j < input2.value; j++) {
       if (i === 0) {
         const lift = document.createElement("div");
-        const door = document.createElement("div")
+        const door = document.createElement("div");
         const leftSpan = document.createElement("span");
         const rightSpan = document.createElement("span");
         lift.classList.add("lift");
         lift.setAttribute("id", `lift-${j + 1}`);
-        door.classList.add("door")
+        door.classList.add("door");
         leftSpan.classList.add("left");
         rightSpan.classList.add("right");
-        lift.appendChild(door)
+        lift.appendChild(door);
         door.appendChild(leftSpan);
         door.appendChild(rightSpan);
         floorDiv.appendChild(lift);
@@ -132,17 +135,17 @@ function createFloor() {
         currentFloor = floorNum;
         lift.dataset.currentfloor = currentFloor;
 
-        function doorOpenClose(lift){
+        function doorOpenClose(lift) {
           let door = lift.firstChild;
-          
+
           setTimeout(() => {
             door.children[0].style.transform = "translateX( -40px)";
             door.children[0].style.transition = "all 2.5s ease-in-out";
-        
+
             door.children[1].style.transform = "translateX( 40px)";
             door.children[1].style.transition = "all 2.5s ease-in-out";
-          }, 0 );
-        
+          }, 0);
+
           setTimeout(() => {
             door.children[0].style.transform = "translateX(0px)";
             door.children[1].style.transform = "translateX(0px)";
