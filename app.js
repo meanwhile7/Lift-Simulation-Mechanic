@@ -7,7 +7,7 @@ const myButton = document.getElementById("btn");
 function checkInputs(inputValue1, inputValue2) {
   if (inputValue1 > 0 && inputValue2 > 0) {
     container.style.display = "none";
-    createFloor();
+    StartSimulation();
   } else {
     myButton.disabled = true;
   }
@@ -35,7 +35,7 @@ myButton.addEventListener("click", function () {
   checkInputs(inputValue1, inputValue2);
 });
 
-function createFloor() {
+function createUI() {
   const main = document.querySelector(".floor-box");
   for (let i = 0; i < input1.value; i++) {
     // create back button
@@ -90,7 +90,17 @@ function createFloor() {
       }
     }
   }
+   //back button
 
+   back = document.querySelector(".bac-btn");
+   back.addEventListener("click", () => {
+     location.reload();
+   });
+   
+}
+
+const StartSimulation = () =>{
+  createUI();
   // let currentFloor = 1; // initialize the current floor to 1
   const upbtns = document.querySelectorAll(".floor .btn-up");
   const downbtns = document.querySelectorAll(".floor .btn-down");
@@ -110,6 +120,8 @@ function createFloor() {
   });
 
   function moveLift(buttons, direction) {
+    const queue = []; // Create a queue to store the lift requests
+
     buttons.forEach((btn, index) => {
       btn.addEventListener("click", function () {
         const floorNum = parseInt(btn.id.split("-")[1]);
@@ -122,53 +134,66 @@ function createFloor() {
         );
 
         const lift = freeLifts;
+          if (queue.length === 0) {
+            // If the queue is empty, immediately process the request
+            processRequest(floorNum);
+          } else {
+            // If there are pending requests, add the current request to the queue
+            queue.push(floorNum);
+          }
+        
+        
 
-        lift.style.transform = `translateY(${-floorHeight * (floorNum - 1)}px)`;
-        lift.dataset.status = "busy";
-        console.log(
-          `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
-        );
+        function processRequest(floorNum) {
+          lift.style.transform = `translateY(${
+            -floorHeight * (floorNum - 1)
+          }px)`;
+          lift.dataset.status = "busy";
+          console.log(
+            `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
+          );
 
-        const transitionDuration = floorNum * 1;
-        lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
-        lift.dataset.currentfloor = floorNum;
-        currentFloor = floorNum;
-        lift.dataset.currentfloor = currentFloor;
+          const transitionDuration = floorNum * 1;
+          lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
+          lift.dataset.currentfloor = floorNum;
+          currentFloor = floorNum;
+          lift.dataset.currentfloor = currentFloor;
 
-        function doorOpenClose(lift) {
-          let door = lift.firstChild;
+          function doorOpenClose(lift) {
+            let door = lift.firstChild;
+
+            setTimeout(() => {
+              door.children[0].style.transform = "translateX( -40px)";
+              door.children[0].style.transition = "all 2.5s ease-in-out";
+
+              door.children[1].style.transform = "translateX( 40px)";
+              door.children[1].style.transition = "all 2.5s ease-in-out";
+            }, 0);
+
+            setTimeout(() => {
+              door.children[0].style.transform = "translateX(0px)";
+              door.children[1].style.transform = "translateX(0px)";
+            }, 2500);
+          }
 
           setTimeout(() => {
-            door.children[0].style.transform = "translateX( -40px)";
-            door.children[0].style.transition = "all 2.5s ease-in-out";
-
-            door.children[1].style.transform = "translateX( 40px)";
-            door.children[1].style.transition = "all 2.5s ease-in-out";
-          }, 0);
-
-          setTimeout(() => {
-            door.children[0].style.transform = "translateX(0px)";
-            door.children[1].style.transform = "translateX(0px)";
-          }, 2500);
+            doorOpenClose(lift);
+            setTimeout(() => {
+              lift.dataset.status = "free";
+              if (queue.length > 0) {
+                console.log(queue)
+                // If there are pending requests, process the next request in the queue
+                const nextFloor = queue.shift();
+                processRequest(nextFloor);
+              }
+            }, 5500);
+          }, Math.abs(floorNum) * 1000);
         }
-
-        setTimeout(() => {
-          doorOpenClose(lift);
-          setTimeout(() => {
-            // console.log("hello")
-            lift.dataset.status = "free";
-          }, 5500);
-        }, Math.abs(floorNum) * 1000);
       });
     });
   }
 
   runElevator();
 
-  //back button
-
-  back = document.querySelector(".bac-btn");
-  back.addEventListener("click", () => {
-    location.reload();
-  });
+ 
 }
