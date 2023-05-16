@@ -60,8 +60,8 @@ function createUI() {
     floorHeading.textContent = `floor ${i + 1}`;
     upBtn.setAttribute("id", `up-${i + 1}`);
     downBtn.setAttribute("id", `down-${i + 1}`);
-    upBtn.classList.add("btn", "btn-up");
-    downBtn.classList.add("btn", "btn-down");
+    upBtn.classList.add("btn-up");
+    downBtn.classList.add("btn-down");
     upBtn.textContent = "Up";
     downBtn.textContent = "Down";
 
@@ -102,24 +102,22 @@ function createUI() {
 const StartSimulation = () =>{
   createUI();
   // let currentFloor = 1; // initialize the current floor to 1
-  const upbtns = document.querySelectorAll(".floor .btn-up");
-  const downbtns = document.querySelectorAll(".floor .btn-down");
+  const upbtns = document.querySelectorAll(".btn-up");
+  const downbtns = document.querySelectorAll(".btn-down");
   const floors = document.querySelectorAll(".floor");
   let currentFloor = 1;
 
-  // Define a map to store the previous floor value for each lift
-
   function runElevator() {
-    moveLift(upbtns, "up");
-    moveLift(downbtns, "down");
+    moveLift(upbtns);
+    moveLift(downbtns);
   }
-
+  
   const lifts = document.querySelectorAll(".lift");
   lifts.forEach((lift) => {
     lift.dataset.status = "free";
   });
 
-  function moveLift(buttons, direction) {
+  const moveLift= (buttons)=> {
     const queue = []; // Create a queue to store the lift requests
 
     buttons.forEach((btn, index) => {
@@ -132,36 +130,19 @@ const StartSimulation = () =>{
         const freeLifts = liftArray.find(
           (lift) => lift.dataset.status === "free"
         );
-
         const lift = freeLifts;
-          if (queue.length === 0) {
-            // If the queue is empty, immediately process the request
-            processRequest(floorNum);
-          } else {
-            // If there are pending requests, add the current request to the queue
-            queue.push(floorNum);
-          }
-        
-        
-
-        function processRequest(floorNum) {
+        const liftmov = ()=>{
           lift.style.transform = `translateY(${
             -floorHeight * (floorNum - 1)
           }px)`;
           lift.dataset.status = "busy";
-          console.log(
-            `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
-          );
-
           const transitionDuration = floorNum * 1;
           lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
-          lift.dataset.currentfloor = floorNum;
-          currentFloor = floorNum;
-          lift.dataset.currentfloor = currentFloor;
-
+          
+        }
+        
           function doorOpenClose(lift) {
             let door = lift.firstChild;
-
             setTimeout(() => {
               door.children[0].style.transform = "translateX( -40px)";
               door.children[0].style.transition = "all 2.5s ease-in-out";
@@ -169,31 +150,22 @@ const StartSimulation = () =>{
               door.children[1].style.transform = "translateX( 40px)";
               door.children[1].style.transition = "all 2.5s ease-in-out";
             }, 0);
-
             setTimeout(() => {
               door.children[0].style.transform = "translateX(0px)";
               door.children[1].style.transform = "translateX(0px)";
             }, 2500);
           }
 
+          liftmov()
           setTimeout(() => {
             doorOpenClose(lift);
             setTimeout(() => {
               lift.dataset.status = "free";
-              if (queue.length > 0) {
-                console.log(queue)
-                // If there are pending requests, process the next request in the queue
-                const nextFloor = queue.shift();
-                processRequest(nextFloor);
-              }
             }, 5500);
           }, Math.abs(floorNum) * 1000);
-        }
       });
     });
   }
 
   runElevator();
-
- 
 }
