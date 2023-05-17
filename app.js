@@ -90,34 +90,32 @@ function createUI() {
       }
     }
   }
-   //back button
+  //back button
 
-   back = document.querySelector(".bac-btn");
-   back.addEventListener("click", () => {
-     location.reload();
-   });
-   
+  back = document.querySelector(".bac-btn");
+  back.addEventListener("click", () => {
+    location.reload();
+  });
 }
 
-const StartSimulation = () =>{
+const StartSimulation = () => {
   createUI();
   // let currentFloor = 1; // initialize the current floor to 1
   const upbtns = document.querySelectorAll(".btn-up");
   const downbtns = document.querySelectorAll(".btn-down");
   const floors = document.querySelectorAll(".floor");
-  let currentFloor = 1;
 
   function runElevator() {
     moveLift(upbtns);
     moveLift(downbtns);
   }
-  
+
   const lifts = document.querySelectorAll(".lift");
   lifts.forEach((lift) => {
     lift.dataset.status = "free";
   });
 
-  const moveLift= (buttons)=> {
+  const moveLift = (buttons) => {
     const queue = []; // Create a queue to store the lift requests
 
     buttons.forEach((btn, index) => {
@@ -131,41 +129,51 @@ const StartSimulation = () =>{
           (lift) => lift.dataset.status === "free"
         );
         const lift = freeLifts;
-        const liftmov = ()=>{
+
+        // Add the request to the queue
+        queue.push(floorNum);
+        console.log(queue);
+
+        //logic for lift movement
+
+        const liftmov = (lift, callback) => {
           lift.style.transform = `translateY(${
             -floorHeight * (floorNum - 1)
           }px)`;
           lift.dataset.status = "busy";
           const transitionDuration = floorNum * 1;
           lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
-          
+          // Invoke the callback function after lift movement is completed
+          setTimeout(callback, transitionDuration);
+        };
+
+        function doorOpenClose(lift) {
+          let door = lift.firstChild;
+          setTimeout(() => {
+            door.children[0].style.transform = "translateX( -40px)";
+            door.children[0].style.transition = "all 2.5s ease-in-out";
+
+            door.children[1].style.transform = "translateX( 40px)";
+            door.children[1].style.transition = "all 2.5s ease-in-out";
+          }, 0);
+          setTimeout(() => {
+            door.children[0].style.transform = "translateX(0px)";
+            door.children[1].style.transform = "translateX(0px)";
+          }, 2500);
         }
-        
-          function doorOpenClose(lift) {
-            let door = lift.firstChild;
-            setTimeout(() => {
-              door.children[0].style.transform = "translateX( -40px)";
-              door.children[0].style.transition = "all 2.5s ease-in-out";
 
-              door.children[1].style.transform = "translateX( 40px)";
-              door.children[1].style.transition = "all 2.5s ease-in-out";
-            }, 0);
-            setTimeout(() => {
-              door.children[0].style.transform = "translateX(0px)";
-              door.children[1].style.transform = "translateX(0px)";
-            }, 2500);
-          }
-
-          liftmov()
+        liftmov(lift, () => {
           setTimeout(() => {
             doorOpenClose(lift);
             setTimeout(() => {
               lift.dataset.status = "free";
+              console.log(queue.shift());
             }, 5500);
           }, Math.abs(floorNum) * 1000);
+        });
       });
     });
-  }
+  };
 
   runElevator();
-}
+};
