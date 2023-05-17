@@ -136,41 +136,34 @@ const StartSimulation = () => {
 
         //logic for lift movement
 
-        const liftmov = (lift, callback) => {
+        const liftmov = (lift) => {
           lift.style.transform = `translateY(${
             -floorHeight * (floorNum - 1)
           }px)`;
           lift.dataset.status = "busy";
           const transitionDuration = floorNum * 1;
           lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
-          // Invoke the callback function after lift movement is completed
-          setTimeout(callback, transitionDuration);
-        };
-
-        function doorOpenClose(lift) {
-          let door = lift.firstChild;
+          
           setTimeout(() => {
-            door.children[0].style.transform = "translateX( -40px)";
-            door.children[0].style.transition = "all 2.5s ease-in-out";
+            let door = lift.firstChild;
+            setTimeout(() => {
+              door.children[0].style.transform = "translateX( -40px)";
+              door.children[0].style.transition = "all 2.5s ease-in-out";
 
-            door.children[1].style.transform = "translateX( 40px)";
-            door.children[1].style.transition = "all 2.5s ease-in-out";
-          }, 0);
-          setTimeout(() => {
-            door.children[0].style.transform = "translateX(0px)";
-            door.children[1].style.transform = "translateX(0px)";
-          }, 2500);
-        }
-
-        liftmov(lift, () => {
-          setTimeout(() => {
-            doorOpenClose(lift);
+              door.children[1].style.transform = "translateX( 40px)";
+              door.children[1].style.transition = "all 2.5s ease-in-out";
+            }, 0);
+            setTimeout(() => {
+              door.children[0].style.transform = "translateX(0px)";
+              door.children[1].style.transform = "translateX(0px)";
+            }, 2500);
             setTimeout(() => {
               lift.dataset.status = "free";
               console.log(queue.shift());
             }, 5500);
           }, Math.abs(floorNum) * 1000);
-        });
+        };
+        liftmov(lift);
       });
     });
   };
