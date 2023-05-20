@@ -1,43 +1,43 @@
 // Conditions of input box //
 
-const input1 = document.getElementById("num-floor");
-const input2 = document.getElementById("num-lift");
+const number_of_floors = document.getElementById("num-floor");
+const number_of_lifts = document.getElementById("num-lift");
 const myButton = document.getElementById("btn");
 
 function checkInputs(inputValue1, inputValue2) {
   if (inputValue1 > 0 && inputValue2 > 0) {
     container.style.display = "none";
-    createFloor();
+    StartSimulation();
   } else {
     myButton.disabled = true;
   }
 }
 
 myButton.addEventListener("click", function () {
-  const inputValue1 = parseInt(input1.value);
-  const inputValue2 = parseInt(input2.value);
+  const floors_value = parseInt(number_of_floors.value);
+  const lifts_value = parseInt(number_of_lifts.value);
 
-  if (inputValue1 === "" || inputValue2 === "") {
+  if (floors_value === "" || lifts_value === "") {
     alert("Please enter values for both inputs");
     return;
   } else {
-    if (isNaN(inputValue1) || isNaN(inputValue2)) {
+    if (isNaN(floors_value) || isNaN(lifts_value)) {
       alert("Please enter valid integer values for both inputs");
       return;
     } else {
-      if (inputValue1 < 0 || inputValue2 < 0) {
+      if (floors_value < 0 || lifts_value < 0) {
         alert("negative number not allowed");
         return;
       }
     }
   }
 
-  checkInputs(inputValue1, inputValue2);
+  checkInputs(floors_value, lifts_value);
 });
 
-function createFloor() {
+function createUI() {
   const main = document.querySelector(".floor-box");
-  for (let i = 0; i < input1.value; i++) {
+  for (let i = 0; i < number_of_floors.value; i++) {
     // create back button
     if (i === 0) {
       const bac = document.createElement("button");
@@ -60,8 +60,8 @@ function createFloor() {
     floorHeading.textContent = `floor ${i + 1}`;
     upBtn.setAttribute("id", `up-${i + 1}`);
     downBtn.setAttribute("id", `down-${i + 1}`);
-    upBtn.classList.add("btn", "btn-up");
-    downBtn.classList.add("btn", "btn-down");
+    upBtn.classList.add("btn-up");
+    downBtn.classList.add("btn-down");
     upBtn.textContent = "Up";
     downBtn.textContent = "Down";
 
@@ -72,7 +72,7 @@ function createFloor() {
     btnDiv.appendChild(upBtn);
     btnDiv.appendChild(downBtn);
 
-    for (let j = 0; j < input2.value; j++) {
+    for (let j = 0; j < number_of_lifts.value; j++) {
       if (i === 0) {
         const lift = document.createElement("div");
         const door = document.createElement("div");
@@ -90,80 +90,6 @@ function createFloor() {
       }
     }
   }
-
-  // let currentFloor = 1; // initialize the current floor to 1
-  const upbtns = document.querySelectorAll(".floor .btn-up");
-  const downbtns = document.querySelectorAll(".floor .btn-down");
-  const floors = document.querySelectorAll(".floor");
-  let currentFloor = 1;
-
-  // Define a map to store the previous floor value for each lift
-
-  function runElevator() {
-    moveLift(upbtns, "up");
-    moveLift(downbtns, "down");
-  }
-
-  const lifts = document.querySelectorAll(".lift");
-  lifts.forEach((lift) => {
-    lift.dataset.status = "free";
-  });
-
-  function moveLift(buttons, direction) {
-    buttons.forEach((btn, index) => {
-      btn.addEventListener("click", function () {
-        const floorNum = parseInt(btn.id.split("-")[1]);
-        const floor = Array.from(floors)[index];
-        const floorHeight = floor.offsetHeight + 5;
-
-        const liftArray = Array.from(lifts);
-        const freeLifts = liftArray.find(
-          (lift) => lift.dataset.status === "free"
-        );
-
-        const lift = freeLifts;
-
-        lift.style.transform = `translateY(${-floorHeight * (floorNum - 1)}px)`;
-        lift.dataset.status = "busy";
-        console.log(
-          `The elevator has arrived from floor ${currentFloor} at floor ${floorNum}.`
-        );
-
-        const transitionDuration = floorNum * 1;
-        lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
-        lift.dataset.currentfloor = floorNum;
-        currentFloor = floorNum;
-        lift.dataset.currentfloor = currentFloor;
-
-        function doorOpenClose(lift) {
-          let door = lift.firstChild;
-
-          setTimeout(() => {
-            door.children[0].style.transform = "translateX( -40px)";
-            door.children[0].style.transition = "all 2.5s ease-in-out";
-
-            door.children[1].style.transform = "translateX( 40px)";
-            door.children[1].style.transition = "all 2.5s ease-in-out";
-          }, 0);
-
-          setTimeout(() => {
-            door.children[0].style.transform = "translateX(0px)";
-            door.children[1].style.transform = "translateX(0px)";
-          }, 2500);
-        }
-
-        setTimeout(() => {
-          doorOpenClose(lift);
-          setTimeout(() => {
-            lift.dataset.status = "free";
-          }, 5500);
-        }, Math.abs(floorNum) * 1000);
-      });
-    });
-  }
-
-  runElevator();
-
   //back button
 
   back = document.querySelector(".bac-btn");
@@ -171,3 +97,89 @@ function createFloor() {
     location.reload();
   });
 }
+
+const StartSimulation = () => {
+  createUI();
+  // let currentFloor = 1; // initialize the current floor to 1
+  const upbtns = document.querySelectorAll(".btn-up");
+  const downbtns = document.querySelectorAll(".btn-down");
+  const floors = document.querySelectorAll(".floor");
+  const queue = [];
+  let liftBusy = false; // Flag to indicate if the lift is currently busy
+
+  const lifts = document.querySelectorAll(".lift");
+  lifts.forEach((lift) => {
+    lift.dataset.status = "free";
+  });
+
+  const processQueue = () => {
+    if (queue.length > 0) {
+      const target = queue.shift();
+      const floor = Array.from(floors)[target - 1];
+      const floorHeight = floor.offsetHeight + 5;
+      const freeLift = getFreeLift();
+
+      if (freeLift) {
+        liftmov(freeLift, target, floorHeight);
+      } else {
+        // No free lifts available, add the target floor back to the queue
+        queue.unshift(target);
+      }
+    }
+  };
+
+  const getFreeLift = () => {
+    return Array.from(lifts).find((lift) => lift.dataset.status === "free");
+  };
+
+  const liftmov = (lift, target_floor, floorHeight) => {
+    lift.style.transform = `translateY(${-floorHeight * (target_floor - 1)}px)`;
+    lift.dataset.status = "busy";
+    const transitionDuration = target_floor * 1;
+    lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
+
+    setTimeout(() => {
+      let door = lift.firstChild;
+      setTimeout(() => {
+        door.children[0].style.transform = "translateX( -40px)";
+        door.children[0].style.transition = "all 2.5s ease-in-out";
+
+        door.children[1].style.transform = "translateX( 40px)";
+        door.children[1].style.transition = "all 2.5s ease-in-out";
+      }, 0);
+      setTimeout(() => {
+        door.children[0].style.transform = "translateX(0px)";
+        door.children[1].style.transform = "translateX(0px)";
+      }, 2500);
+      setTimeout(() => {
+        lift.dataset.status = "free";
+        
+        liftBusy = false;
+        if (queue.length > 0) {
+          processQueue(); // Process the next request in the queue
+        } else {
+          console.log("No requests in the queue.");
+        }
+      }, 5500);
+    }, Math.abs(target_floor) * 1000);
+  };
+  // Adding event listeners to up buttons
+  upbtns.forEach((upbtn) => {
+    upbtn.addEventListener("click", function () {
+      queue.push(parseInt(upbtn.id.split("-")[1]));
+      if (!liftBusy) {
+        processQueue();
+      }
+    });
+  });
+
+  // Adding event listeners to down buttons
+  downbtns.forEach((downbtn) => {
+    downbtn.addEventListener("click", function () {
+      queue.push(parseInt(downbtn.id.split("-")[1]));
+      if (!liftBusy) {
+        processQueue();
+      }
+    });
+  });
+};
