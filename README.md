@@ -48,6 +48,10 @@ cd lift-simulation
 5. The lifts will start moving to fulfill the requested floors, and the doors will open/close when reaching the target floor.
 6. The lifts will continue to serve subsequent requests in the queue.
 
+## Live Demo
+
+A live demo of the Lift Simulation can be found [here](https://astonishing-moonbeam-290d34.netlify.app/).
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
