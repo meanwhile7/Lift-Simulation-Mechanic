@@ -105,80 +105,81 @@ const StartSimulation = () => {
   const downbtns = document.querySelectorAll(".btn-down");
   const floors = document.querySelectorAll(".floor");
   const queue = [];
-
-  function runElevator() {
-    moveLift(upbtns);
-    moveLift(downbtns);
-  }
+  let liftBusy = false; // Flag to indicate if the lift is currently busy
 
   const lifts = document.querySelectorAll(".lift");
   lifts.forEach((lift) => {
     lift.dataset.status = "free";
   });
 
-  const moveLift = (buttons) => {
-    let liftBusy = false; // Flag to indicate if the lift is currently busy
+  const processQueue = () => {
+    if (queue.length > 0) {
+      const target = queue.shift();
+      const floor = Array.from(floors)[target - 1];
+      const floorHeight = floor.offsetHeight + 5;
+      const freeLift = getFreeLift();
 
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", function () {
-        queue.push(parseInt(btn.id.split("-")[1]));
-
-        if (!liftBusy) {
-          processQueue();
-        }
-      });
-    });
-
-    const processQueue = () => {
-      if (queue.length > 0) {
-        liftBusy = true;
-
-        const target = queue.shift();
-        const floor = Array.from(floors)[target - 1];
-        const floorHeight = floor.offsetHeight + 5;
-        const freeLift = getFreeLift();
-
-        if (freeLift) {
-          liftmov(freeLift, target, floorHeight);
-        }
+      if (freeLift) {
+        liftmov(freeLift, target, floorHeight);
+      } else {
+        // No free lifts available, add the target floor back to the queue
+        queue.unshift(target);
       }
-    };
-
-    const getFreeLift = () => {
-      return Array.from(lifts).find((lift) => lift.dataset.status === "free");
-    };
-
-    const liftmov = (lift, target_floor, floorHeight) => {
-      lift.style.transform = `translateY(${
-        -floorHeight * (target_floor - 1)
-      }px)`;
-      lift.dataset.status = "busy";
-      const transitionDuration = target_floor * 1;
-      lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
-
-      setTimeout(() => {
-        let door = lift.firstChild;
-        setTimeout(() => {
-          door.children[0].style.transform = "translateX( -40px)";
-          door.children[0].style.transition = "all 2.5s ease-in-out";
-
-          door.children[1].style.transform = "translateX( 40px)";
-          door.children[1].style.transition = "all 2.5s ease-in-out";
-        }, 0);
-        setTimeout(() => {
-          door.children[0].style.transform = "translateX(0px)";
-          door.children[1].style.transform = "translateX(0px)";
-        }, 2500);
-        setTimeout(() => {
-          lift.dataset.status = "free";
-          liftBusy = false;
-          if (queue.length > 0) {
-            processQueue(); // Process the next request in the queue
-          }
-        }, 5500);
-      }, Math.abs(target_floor) * 1000);
-    };
+    }
   };
 
-  runElevator();
+  const getFreeLift = () => {
+    return Array.from(lifts).find((lift) => lift.dataset.status === "free");
+  };
+
+  const liftmov = (lift, target_floor, floorHeight) => {
+    lift.style.transform = `translateY(${-floorHeight * (target_floor - 1)}px)`;
+    lift.dataset.status = "busy";
+    const transitionDuration = target_floor * 1;
+    lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
+
+    setTimeout(() => {
+      let door = lift.firstChild;
+      setTimeout(() => {
+        door.children[0].style.transform = "translateX( -40px)";
+        door.children[0].style.transition = "all 2.5s ease-in-out";
+
+        door.children[1].style.transform = "translateX( 40px)";
+        door.children[1].style.transition = "all 2.5s ease-in-out";
+      }, 0);
+      setTimeout(() => {
+        door.children[0].style.transform = "translateX(0px)";
+        door.children[1].style.transform = "translateX(0px)";
+      }, 2500);
+      setTimeout(() => {
+        lift.dataset.status = "free";
+        
+        liftBusy = false;
+        if (queue.length > 0) {
+          processQueue(); // Process the next request in the queue
+        } else {
+          console.log("No requests in the queue.");
+        }
+      }, 5500);
+    }, Math.abs(target_floor) * 1000);
+  };
+  // Adding event listeners to up buttons
+  upbtns.forEach((upbtn) => {
+    upbtn.addEventListener("click", function () {
+      queue.push(parseInt(upbtn.id.split("-")[1]));
+      if (!liftBusy) {
+        processQueue();
+      }
+    });
+  });
+
+  // Adding event listeners to down buttons
+  downbtns.forEach((downbtn) => {
+    downbtn.addEventListener("click", function () {
+      queue.push(parseInt(downbtn.id.split("-")[1]));
+      if (!liftBusy) {
+        processQueue();
+      }
+    });
+  });
 };
