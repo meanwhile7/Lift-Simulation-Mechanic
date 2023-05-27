@@ -60,8 +60,8 @@ function createUI() {
     floorHeading.textContent = `floor ${i + 1}`;
     upBtn.setAttribute("id", `up-${i + 1}`);
     downBtn.setAttribute("id", `down-${i + 1}`);
-    upBtn.classList.add("btn-up");
-    downBtn.classList.add("btn-down");
+    upBtn.classList.add("buttons");
+    downBtn.classList.add("buttons");
     upBtn.textContent = "Up";
     downBtn.textContent = "Down";
 
@@ -101,8 +101,7 @@ function createUI() {
 const StartSimulation = () => {
   createUI();
   // let currentFloor = 1; // initialize the current floor to 1
-  const upbtns = document.querySelectorAll(".btn-up");
-  const downbtns = document.querySelectorAll(".btn-down");
+  const upbtns = document.querySelectorAll(".buttons");
   const floors = document.querySelectorAll(".floor");
   const queue = [];
   let liftBusy = false; // Flag to indicate if the lift is currently busy
@@ -110,8 +109,9 @@ const StartSimulation = () => {
   const lifts = document.querySelectorAll(".lift");
   lifts.forEach((lift) => {
     lift.dataset.status = "free";
-  });
 
+  });
+  
   const processQueue = () => {
     if (queue.length > 0) {
       const target = queue.shift();
@@ -153,7 +153,7 @@ const StartSimulation = () => {
       }, 2500);
       setTimeout(() => {
         lift.dataset.status = "free";
-        
+
         liftBusy = false;
         if (queue.length > 0) {
           processQueue(); // Process the next request in the queue
@@ -167,16 +167,6 @@ const StartSimulation = () => {
   upbtns.forEach((upbtn) => {
     upbtn.addEventListener("click", function () {
       queue.push(parseInt(upbtn.id.split("-")[1]));
-      if (!liftBusy) {
-        processQueue();
-      }
-    });
-  });
-
-  // Adding event listeners to down buttons
-  downbtns.forEach((downbtn) => {
-    downbtn.addEventListener("click", function () {
-      queue.push(parseInt(downbtn.id.split("-")[1]));
       if (!liftBusy) {
         processQueue();
       }
