@@ -91,7 +91,6 @@ function createUI() {
     }
   }
   //back button
-
   back = document.querySelector(".bac-btn");
   back.addEventListener("click", () => {
     location.reload();
@@ -100,7 +99,6 @@ function createUI() {
 
 const StartSimulation = () => {
   createUI();
-  // let currentFloor = 1; // initialize the current floor to 1
   const upbtns = document.querySelectorAll(".buttons");
   const floors = document.querySelectorAll(".floor");
   const queue = [];
@@ -149,7 +147,7 @@ const StartSimulation = () => {
   const liftmov = (lift, target_floor, floorHeight) => {
     lift.style.transform = `translateY(${-floorHeight * (target_floor - 1)}px)`;
     lift.dataset.status = "busy";
-    const transitionDuration = target_floor * 1;
+    const transitionDuration = 1 * Math.abs(target_floor - parseInt(lift.dataset.floor));
     lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
     lift.dataset.floor = target_floor;
     setTimeout(() => {
@@ -175,7 +173,7 @@ const StartSimulation = () => {
           console.log("No requests in the queue.");
         }
       }, 5500);
-    }, Math.abs(target_floor) * 1000);
+    }, Math.abs(transitionDuration) * 1000);
   };
 
   const isTargetFloorInLifts = (targetFloor) => {
