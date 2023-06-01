@@ -112,17 +112,31 @@ const StartSimulation = () => {
     lift.dataset.floor = "1"; // Initialize the current floor to 1 for each lift
   });
 
-  const getFreeLift = () => {
-    return Array.from(lifts).find((lift) => lift.dataset.status === "free");
+  const getFreeLift = (targetFloor) => {
+    let minDistance = Infinity;
+    let nearestLift = null;
+
+    Array.from(lifts).forEach((lift) => {
+      if (lift.dataset.status === "free") {
+        const currentFloor = parseInt(lift.dataset.floor);
+        const distance = Math.abs(currentFloor - targetFloor);
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestLift = lift;
+        }
+      }
+    });
+
+    return nearestLift;
   };
-  
+
   const processQueue = () => {
     if (queue.length > 0) {
       const target = queue.shift();
       const floor = Array.from(floors)[target - 1];
       const floorHeight = floor.offsetHeight + 5;
       const freeLift = getFreeLift(target);
-  
+
       if (freeLift) {
         liftmov(freeLift, target, floorHeight);
       } else {
@@ -130,7 +144,7 @@ const StartSimulation = () => {
         queue.unshift(target);
       }
     }
-  };  
+  };
 
   const liftmov = (lift, target_floor, floorHeight) => {
     lift.style.transform = `translateY(${-floorHeight * (target_floor - 1)}px)`;
@@ -171,7 +185,7 @@ const StartSimulation = () => {
       return floor === targetFloor;
     });
   };
-  
+
   // Adding event listeners to up buttons
   upbtns.forEach((upbtn) => {
     upbtn.addEventListener("click", function () {
@@ -184,5 +198,4 @@ const StartSimulation = () => {
       }
     });
   });
-  
 };
