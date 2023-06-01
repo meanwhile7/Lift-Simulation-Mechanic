@@ -109,35 +109,35 @@ const StartSimulation = () => {
   const lifts = document.querySelectorAll(".lift");
   lifts.forEach((lift) => {
     lift.dataset.status = "free";
-
+    lift.dataset.floor = "1"; // Initialize the current floor to 1 for each lift
   });
+
+  const getFreeLift = () => {
+    return Array.from(lifts).find((lift) => lift.dataset.status === "free");
+  };
   
   const processQueue = () => {
     if (queue.length > 0) {
       const target = queue.shift();
       const floor = Array.from(floors)[target - 1];
       const floorHeight = floor.offsetHeight + 5;
-      const freeLift = getFreeLift();
-
+      const freeLift = getFreeLift(target);
+  
       if (freeLift) {
         liftmov(freeLift, target, floorHeight);
       } else {
-        // No free lifts available, add the target floor back to the queue
+        // No free lifts available or lifts with target floor found, add the target floor back to the queue
         queue.unshift(target);
       }
     }
-  };
-
-  const getFreeLift = () => {
-    return Array.from(lifts).find((lift) => lift.dataset.status === "free");
-  };
+  };  
 
   const liftmov = (lift, target_floor, floorHeight) => {
     lift.style.transform = `translateY(${-floorHeight * (target_floor - 1)}px)`;
     lift.dataset.status = "busy";
     const transitionDuration = target_floor * 1;
     lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
-
+    lift.dataset.floor = target_floor;
     setTimeout(() => {
       let door = lift.firstChild;
       setTimeout(() => {
@@ -163,13 +163,26 @@ const StartSimulation = () => {
       }, 5500);
     }, Math.abs(target_floor) * 1000);
   };
+
+  const isTargetFloorInLifts = (targetFloor) => {
+    const lifts = document.querySelectorAll(".lift");
+    return Array.from(lifts).some((lift) => {
+      const floor = parseInt(lift.dataset.floor);
+      return floor === targetFloor;
+    });
+  };
+  
   // Adding event listeners to up buttons
   upbtns.forEach((upbtn) => {
     upbtn.addEventListener("click", function () {
-      queue.push(parseInt(upbtn.id.split("-")[1]));
+      const targetFloor = parseInt(upbtn.id.split("-")[1]);
+      if (!isTargetFloorInLifts(targetFloor)) {
+        queue.push(targetFloor);
+      }
       if (!liftBusy) {
         processQueue();
       }
     });
   });
+  
 };
