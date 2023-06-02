@@ -149,7 +149,7 @@ const StartSimulation = () => {
     lift.style.transform = `translateY(${-floorHeight * (target_floor - 1)}px)`;
     lift.dataset.status = "busy";
     const transitionDuration =
-      1 * Math.abs(target_floor - parseInt(lift.dataset.floor));
+      2 * Math.abs(target_floor - parseInt(lift.dataset.floor));
     lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
     lift.dataset.floor = target_floor;
     setTimeout(() => {
