@@ -147,7 +147,8 @@ const StartSimulation = () => {
   const liftmov = (lift, target_floor, floorHeight) => {
     lift.style.transform = `translateY(${-floorHeight * (target_floor - 1)}px)`;
     lift.dataset.status = "busy";
-    const transitionDuration = 1 * Math.abs(target_floor - parseInt(lift.dataset.floor));
+    const transitionDuration =
+      1 * Math.abs(target_floor - parseInt(lift.dataset.floor));
     lift.style.transition = `transform ${transitionDuration}s ease-in-out`;
     lift.dataset.floor = target_floor;
     setTimeout(() => {
@@ -178,10 +179,11 @@ const StartSimulation = () => {
 
   const isTargetFloorInLifts = (targetFloor) => {
     const lifts = document.querySelectorAll(".lift");
-    return Array.from(lifts).some((lift) => {
+    const targetElement = Array.from(lifts).find((lift) => {
       const floor = parseInt(lift.dataset.floor);
       return floor === targetFloor;
     });
+    return targetElement;
   };
 
   // Adding event listeners to up buttons
@@ -191,8 +193,22 @@ const StartSimulation = () => {
       if (!isTargetFloorInLifts(targetFloor)) {
         queue.push(targetFloor);
       }
+      const targetElement = isTargetFloorInLifts(targetFloor);
       if (!liftBusy) {
         processQueue();
+      }
+
+      if (targetElement !== undefined) {
+        const lift = targetElement;
+        const door = lift.firstChild;
+        door.children[0].style.transform = "translateX( -40px)";
+        door.children[0].style.transition = "all 2.5s ease-in-out";
+        door.children[1].style.transform = "translateX( 40px)";
+        door.children[1].style.transition = "all 2.5s ease-in-out";
+        setTimeout(() => {
+          door.children[0].style.transform = "translateX(0px)";
+          door.children[1].style.transform = "translateX(0px)";
+        }, 2500);
       }
     });
   });
