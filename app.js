@@ -193,23 +193,23 @@ const StartSimulation = () => {
       if (!isTargetFloorInLifts(targetFloor)) {
         queue.push(targetFloor);
       }
-      const targetElement = isTargetFloorInLifts(targetFloor);
+      // const targetElement = isTargetFloorInLifts(targetFloor);
       if (!liftBusy) {
         processQueue();
       }
 
-      if (targetElement !== undefined) {
-        const lift = targetElement;
-        const door = lift.firstChild;
-        door.children[0].style.transform = "translateX( -40px)";
-        door.children[0].style.transition = "all 2.5s ease-in-out";
-        door.children[1].style.transform = "translateX( 40px)";
-        door.children[1].style.transition = "all 2.5s ease-in-out";
-        setTimeout(() => {
-          door.children[0].style.transform = "translateX(0px)";
-          door.children[1].style.transform = "translateX(0px)";
-        }, 2500);
-      }
+      // if (targetElement !== undefined) {
+      //   const lift = targetElement;
+      //   const door = lift.firstChild;
+      //   door.children[0].style.transform = "translateX( -40px)";
+      //   door.children[0].style.transition = "all 2.5s ease-in-out";
+      //   door.children[1].style.transform = "translateX( 40px)";
+      //   door.children[1].style.transition = "all 2.5s ease-in-out";
+      //   setTimeout(() => {
+      //     door.children[0].style.transform = "translateX(0px)";
+      //     door.children[1].style.transform = "translateX(0px)";
+      //   }, 2500);
+      // }
     });
   });
 };
