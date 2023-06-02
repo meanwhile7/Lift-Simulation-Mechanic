@@ -103,6 +103,7 @@ const StartSimulation = () => {
   const floors = document.querySelectorAll(".floor");
   const queue = [];
   let liftBusy = false; // Flag to indicate if the lift is currently busy
+  let lastCalledLift = null; // Variable to store the last called lift
 
   const lifts = document.querySelectorAll(".lift");
   lifts.forEach((lift) => {
@@ -186,30 +187,43 @@ const StartSimulation = () => {
     return targetElement;
   };
 
-  // Adding event listeners to up buttons
+  // Adding event listeners to up buttons and some conditions
   upbtns.forEach((upbtn) => {
     upbtn.addEventListener("click", function () {
       const targetFloor = parseInt(upbtn.id.split("-")[1]);
       if (!isTargetFloorInLifts(targetFloor)) {
         queue.push(targetFloor);
       }
-      // const targetElement = isTargetFloorInLifts(targetFloor);
+
+      const targetElement = isTargetFloorInLifts(targetFloor);
+
       if (!liftBusy) {
         processQueue();
       }
+      if (targetElement !== undefined) {
+        targetElement.dataset.status = "busy";
+        let door = targetElement.firstChild;
+        setTimeout(() => {
+          door.children[0].style.transform = "translateX(-40px)";
+          door.children[0].style.transition = "all 2.5s ease-in-out";
 
-      // if (targetElement !== undefined) {
-      //   const lift = targetElement;
-      //   const door = lift.firstChild;
-      //   door.children[0].style.transform = "translateX( -40px)";
-      //   door.children[0].style.transition = "all 2.5s ease-in-out";
-      //   door.children[1].style.transform = "translateX( 40px)";
-      //   door.children[1].style.transition = "all 2.5s ease-in-out";
-      //   setTimeout(() => {
-      //     door.children[0].style.transform = "translateX(0px)";
-      //     door.children[1].style.transform = "translateX(0px)";
-      //   }, 2500);
-      // }
+          door.children[1].style.transform = "translateX(40px)";
+          door.children[1].style.transition = "all 2.5s ease-in-out";
+        }, 0);
+        setTimeout(() => {
+          door.children[0].style.transform = "translateX(0px)";
+          door.children[1].style.transform = "translateX(0px)";
+        }, 2500);
+        setTimeout(() => {
+          targetElement.dataset.status = "free";
+          liftBusy = false;
+          if (queue.length > 0) {
+            processQueue(); // Process the next request in the queue
+          } else {
+            console.log("No requests in the queue.");
+          }
+        }, 5500);
+      }
     });
   });
 };
